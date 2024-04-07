@@ -1,25 +1,20 @@
-use postgres::{Client, NoTls};
-use postgres::Error as PostgresError;
-use std::net::{TcpListener, TcpStream};
-use std::io::{Read, Write};
-use std::env;
+mod api;
 
-#[macro_use]
-extern crate serde_derive;
+use std::io::Error;
 
-//Model: User struct
-#[derive(Serialize, Deserialize)]
-struct User {
-    id: Option<i32>,
-    name: String,
-    email: String,
-}
+use api::task::{get_task};
 
-const DB_URL: &str = !env("DATABASE_URL");
+use actix_web::{HttpServer, App, web::Data, middleware::Logger};
 
-const OK_RESPONSE: &str = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n";
-const NOT_FOUND_RESPONSE: &str = ""
+#[actix_web::main]
+async fn main()-> std::io::Result<()> {
+    std::env::set_var("RUST_LOG", "debug");
+    std::env::set_var("RUST_BACKTRACE", "1");
+    env_logger::init();
 
-fn main() {
-
+    HttpServer::new(move || {
+        let logger = Logger::default();
+        App::new().wrap(logger).service(get_task)
+    })
+    .bind(("127.0.0.1", 80))?.run().await;
 }
