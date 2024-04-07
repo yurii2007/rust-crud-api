@@ -3,6 +3,7 @@ use aws_config;
 use aws_sdk_dynamodb::model::AttributeValue;
 use aws_sdk_dynamodb::Client;
 use log::error;
+use std::str::FromStr;
 use std::collections::HashMap;
 
 pub struct DDBRepository {

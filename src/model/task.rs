@@ -2,6 +2,7 @@ use serde::Serialize;
 use strum_macros::{Display, EnumString};
 use uuid::Uuid;
 
+#[derive(Serialize, EnumString, Display, PartialEq, Eq)]
 pub enum TaskState {
     NotStarted,
     InProgress,
@@ -24,7 +25,8 @@ impl Task {
     pub fn new(user_uuid: String, task_type: String, source_file: String) -> Task {
         Task {
             user_uuid,
-            task_uuid: Uuid::new(),
+            task_uuid: Uuid::new_v4().to_string(),
+            task_type,
             state: TaskState::NotStarted,
             source_file,
             result_file: None,
@@ -35,7 +37,7 @@ impl Task {
         format!("{}_{}", self.user_uuid, self.task_uuid)
     }
 
-    pub fn can_transition_to(&self, state: TaskState) -> bool {
+    pub fn can_transition_to(&self, state: &TaskState) -> bool {
         self.state != *state
     }
 }
