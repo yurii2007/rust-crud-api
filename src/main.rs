@@ -4,7 +4,7 @@ mod repository;
 
 use std::io::Error;
 
-use api::task::get_task;
+use api::task::{get_task, start_task, submit_task};
 
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
 use aws_config::BehaviorVersion;
@@ -20,9 +20,14 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         let logger = Logger::default();
-        let ddb_repo = DDBRepository::init("tasks".to_string(), config);
+        let ddb_repo = DDBRepository::init("tasks".to_string(), &config);
         let ddb_data = Data::new(ddb_repo);
-        App::new().wrap(logger).app_data(ddb_data).service(get_task)
+        App::new()
+            .wrap(logger)
+            .app_data(ddb_data)
+            .service(get_task)
+            .service(submit_task)
+            .service(start_task)
     })
     .bind(("127.0.0.1", 80))?
     .run()

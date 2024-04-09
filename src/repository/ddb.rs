@@ -1,6 +1,6 @@
 use crate::model::task::{Task, TaskState};
 use aws_config;
-use aws_sdk_dynamodb::model::AttributeValue;
+use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client;
 use log::error;
 use std::str::FromStr;
@@ -56,7 +56,7 @@ fn item_to_task(item: &HashMap<String, AttributeValue>) -> Result<Task, DDBError
 }
 
 impl DDBRepository {
-    pub fn init(table_name: String, config: aws_config::SdkConfig) -> DDBRepository {
+    pub fn init(table_name: String, config: &aws_config::SdkConfig) -> DDBRepository {
         let client = Client::new(&config);
         DDBRepository { table_name, client }
     }
