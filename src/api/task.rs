@@ -1,5 +1,3 @@
-use std::result;
-
 use crate::{
     model::task::{Task, TaskState},
     repository::ddb::DDBRepository,
@@ -20,11 +18,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
 pub struct TaskId {
     task_global_id: String,
-}
-
-#[derive(Deserialize)]
-pub struct TaskComlpetionRequest {
-    result_file: String,
 }
 
 #[derive(Deserialize)]

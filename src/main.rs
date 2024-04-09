@@ -2,8 +2,6 @@ mod api;
 mod model;
 mod repository;
 
-use std::io::Error;
-
 use api::task::{get_task, start_task, submit_task};
 
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
